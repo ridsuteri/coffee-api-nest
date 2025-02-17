@@ -11,39 +11,38 @@ import {
   Query,
   Response,
 } from '@nestjs/common';
-
+import { CoffeesService } from './coffees.service';
 @Controller('coffees')
 export class CoffeesController {
+
+  constructor(private readonly coffeesService: CoffeesService){}
+    
   @Get('flavors')
-  findAll(@Response() response, @Query() paginatedQuery) {
+  findAll(@Query() paginatedQuery) {
     // return ['mocha', 'laate'].toString();
-    let { limit, offset } = paginatedQuery;
-    return response
-      .status(200)
-      .send(
-        `Will return all coffees in paginated manner, limit: ${limit} offset: ${offset}`,
-      );
+    // let { limit, offset } = paginatedQuery;
+    return this.coffeesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `Returning coffee with id: ${id}`;
+    return this.coffeesService.findOne(id);
   }
 
   @Post()
   //   trying status codes here
   //   @HttpCode(HttpStatus.BAD_REQUEST)
   create(@Body('name') body) {
-    return body;
+    return this.coffeesService.create(body);
   }
 
   @Patch(':id')
   update(@Param('id') id: 'string', @Body() body) {
-    return `This action requires ${id} to be updated with ${JSON.stringify(body)}`;
+    return this.coffeesService.update(id, body)
   }
 
   @Delete(':id')
   delete(@Param('id') id: 'string') {
-    return `This action will delete the record with ${id}`;
+    return this.coffeesService.remove(id);
   }
 }
