@@ -12,6 +12,8 @@ import {
   Response,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 @Controller('coffees')
 export class CoffeesController {
 
@@ -25,20 +27,22 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coffeesService.findOne(id);
+  findOne(@Param('id') id: number) {
+    return this.coffeesService.findOne(String(id));
   }
 
   @Post()
   //   trying status codes here
   //   @HttpCode(HttpStatus.BAD_REQUEST)
-  create(@Body('name') body) {
-    return this.coffeesService.create(body);
+  create(@Body() createCoffeeDto: CreateCoffeeDto) {
+    // turns out the createCoffeeDto is in shape of 
+    console.log(createCoffeeDto instanceof CreateCoffeeDto)
+    return this.coffeesService.create(createCoffeeDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: 'string', @Body() body) {
-    return this.coffeesService.update(id, body)
+  update(@Param('id') id: 'string', @Body() updateCoffeeDto:UpdateCoffeeDto) {
+    return this.coffeesService.update(id, updateCoffeeDto)
   }
 
   @Delete(':id')
