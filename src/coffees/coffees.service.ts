@@ -1,8 +1,15 @@
-import {Injectable, NotFoundException } from '@nestjs/common';
+import {Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
+import { COFFEE_BRAND } from './coffees.constants';
 
-@Injectable()
+// this scope bubbles up, so despite the controller being singleton, it will still also turn into a REQUEST scope
+@Injectable({scope: Scope.REQUEST})
 export class CoffeesService {
+  constructor(
+    @Inject(COFFEE_BRAND) coffeeBrands: string[]
+  ){
+    console.log('coffee service instanciated');
+  }
   private coffees: Coffee[] = [
     {
       id: 1,
